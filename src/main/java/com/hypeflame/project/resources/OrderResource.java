@@ -1,10 +1,13 @@
 package com.hypeflame.project.resources;
 
 import com.hypeflame.project.dto.OrderFullResponseModel;
+import com.hypeflame.project.dto.OrderItemListResponseModel;
 import com.hypeflame.project.dto.OrderRequestModel;
 import com.hypeflame.project.dto.OrderResponseModel;
 import com.hypeflame.project.entities.Order;
+import com.hypeflame.project.entities.Payment;
 import com.hypeflame.project.services.OrderService;
+import com.hypeflame.project.services.PaymentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,15 @@ public class OrderResource {
     private ModelMapper modelMapper;
     @Autowired
     private ClientResource clientResource;
+    @Autowired
+    private PaymentService paymentService;
+
+    @GetMapping(value = "/pay/{orderId}")
+    public ResponseEntity<Payment> payRequest(@PathVariable Long orderId){
+        orderService.payOrder(orderId);
+        Payment payment = paymentService.findById(orderId);
+        return ResponseEntity.ok().body(payment);
+    }
 
     @GetMapping
     public ResponseEntity<List<OrderResponseModel>> findAll() {
@@ -32,15 +44,15 @@ public class OrderResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderFullResponseModel> findById(@PathVariable Long id){
+    public ResponseEntity<OrderItemListResponseModel> findById(@PathVariable Long id){
         Order order = orderService.findById(id);
-        return ResponseEntity.ok().body(toFullModel(order));
+        return ResponseEntity.ok().body(toOrderItemListModel(order));
     }
 
     @GetMapping(value = "/full/{id}")
-    public ResponseEntity<Order> findByIdFull(@PathVariable Long id){
+    public ResponseEntity<OrderFullResponseModel> findByIdFull(@PathVariable Long id){
         Order order = orderService.findById(id);
-        return ResponseEntity.ok().body(order);
+        return ResponseEntity.ok().body(toFullModel(order));
     }
 
     @PostMapping
@@ -66,7 +78,10 @@ public class OrderResource {
     public OrderResponseModel toModel(Order order) {
         return modelMapper.map(order, OrderResponseModel.class);
     }
-    public OrderFullResponseModel toFullModel(Order order) {
+    public OrderItemListResponseModel toOrderItemListModel(Order order) {
+        return modelMapper.map(order, OrderItemListResponseModel.class);
+    }
+    public OrderFullResponseModel toFullModel(Order order){
         return modelMapper.map(order, OrderFullResponseModel.class);
     }
     public Order toEntity(OrderRequestModel orderRequestModel){

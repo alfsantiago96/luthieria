@@ -27,7 +27,7 @@ public class Order {
     @ManyToOne
     private Client client;
 
-    @JsonIgnore
+
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 

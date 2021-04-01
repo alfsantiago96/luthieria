@@ -17,6 +17,6 @@ public class ItemResponseModel {
     private Double servicePrice;
     private String orderId;
     private String orderMoment;
-    private Payment payment;
+    private PaymentStatus orderPaymentStatus;
 
 }

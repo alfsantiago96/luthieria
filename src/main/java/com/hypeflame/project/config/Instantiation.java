@@ -34,7 +34,7 @@ public class Instantiation implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-        Client c1 = new Client(null, "André Santiago", "alfsantiago96@gmail.com", "99725098", "03691937098", true);
+        /*Client c1 = new Client(null, "André Santiago", "alfsantiago96@gmail.com", "99725098", "03691937098", true);
         Client c2 = new Client(null, "Alex Green", "alex@gmail.com", "88888888", "000000000", false);
         clientRepository.saveAll(Arrays.asList(c1,c2));
 
@@ -63,7 +63,7 @@ public class Instantiation implements CommandLineRunner {
         Payment p2 = new Payment(null, new Date(), PaymentStatus.ABERTO, o2);
         o1.setPayment(p1);
         o2.setPayment(p2);
-        orderRepository.saveAll(Arrays.asList(o1,o2));
+        orderRepository.saveAll(Arrays.asList(o1,o2));*/
 
 
     }
