@@ -2,6 +2,7 @@ package com.hypeflame.project.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hypeflame.project.entities.enums.OrderStatus;
+import com.hypeflame.project.entities.enums.PaymentStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class Order {
     @JsonIgnore
     @ManyToOne
     private Client client;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     @JsonIgnore
     @OneToMany(mappedBy = "order")

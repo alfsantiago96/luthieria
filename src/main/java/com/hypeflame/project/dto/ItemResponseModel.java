@@ -1,5 +1,7 @@
 package com.hypeflame.project.dto;
 
+import com.hypeflame.project.entities.Payment;
+import com.hypeflame.project.entities.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +17,6 @@ public class ItemResponseModel {
     private Double servicePrice;
     private String orderId;
     private String orderMoment;
+    private Payment payment;
 
 }
