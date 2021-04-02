@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -21,6 +22,8 @@ public class OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ItemService itemService;
 
     //TODO
     public void payOrder(Long orderId){
@@ -52,6 +55,16 @@ public class OrderService {
     public void insertItem(Item item, Long idOrder){
         Order order = findById(idOrder);
         order.getItemList().add(item);
+        orderRepository.save(order);
+    }
+
+    public void removeItem(Long orderId, Long itemId){
+        Order order = findById(orderId);
+        Item itemObj = itemService.findById(itemId);
+        order.getItemList().stream()
+                .filter(item -> item.getId().equals(itemObj.getId()))
+                .map(item -> order.getItemList().remove(item))
+                .collect(Collectors.toList());
         orderRepository.save(order);
     }
 

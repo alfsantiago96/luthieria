@@ -64,7 +64,6 @@ public class OrderResource {
         return ResponseEntity.ok().body(toFullModel(order));
     }
 
-
     @PostMapping
     public ResponseEntity<OrderResponseModel> insert(@RequestBody OrderRequestModel obj){
         Client client = clientService.findById(obj.getClient());
@@ -73,8 +72,18 @@ public class OrderResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(toModel(order));
     }
 
+    //TODO
+    @PostMapping(value = "/{id}/removeitem")
+    public ResponseEntity<OrderItemListResponseModel> removeItem(@RequestBody OrderItemRemoveRequestModel orderItemRemoveRequestModel, @PathVariable Long id){
+        Long orderId = id;
+        Long itemId = orderItemRemoveRequestModel.getItemId();
+        orderService.removeItem(orderId, itemId);
+        Order order = orderService.findById(orderId);
+        return ResponseEntity.ok().body(toOrderItemListModel(order));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id){
         orderService.delete(id);
         return ResponseEntity.noContent().build();
     }
