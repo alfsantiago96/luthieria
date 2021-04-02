@@ -58,6 +58,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    //TODO
     public void removeItem(Long orderId, Long itemId){
         Order order = findById(orderId);
         Item itemObj = itemService.findById(itemId);

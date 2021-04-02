@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,14 +32,23 @@ public class ClientResource {
 
     @GetMapping
     public ResponseEntity<List<ClientResponseModel>> findAll(){
-        List<Client> clientList = clientService.findAll();
-        return ResponseEntity.ok().body(toCollectionModel(clientList));
+        try {
+            List<Client> clientList = clientService.findAll();
+            return ResponseEntity.ok().body(toCollectionModel(clientList));
+        }catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ClientFullResponseModel> findById(@PathVariable Long id){
-        Client client = clientService.findById(id);
-        return ResponseEntity.ok().body(toFullModel(client));
+        try {
+            Client client = clientService.findById(id);
+            return ResponseEntity.ok().body(toFullModel(client));
+        }
+        catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/{idClient}/orders")
@@ -47,22 +58,30 @@ public class ClientResource {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponseModel> insert(@RequestBody ClientRequestModel clientRequestModel){
+    public ResponseEntity<ClientResponseModel> insert(@Valid @RequestBody ClientRequestModel clientRequestModel){
         Client client = toEntity(clientRequestModel);
         clientService.insert(client);
         return ResponseEntity.status(HttpStatus.CREATED).body(toModel(client));
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        clientService.delete(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Client> update(@PathVariable Long id, @Valid @RequestBody Client client){
+        try {
+            Client entity = clientService.update(id, client);
+            return ResponseEntity.ok().body(entity);
+        }catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody Client client){
-        Client entity = clientService.update(id, client);
-        return ResponseEntity.ok().body(entity);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        try {
+            clientService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //ModelMapper

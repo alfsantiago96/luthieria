@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class ClientService {
@@ -34,7 +35,12 @@ public class ClientService {
     }
 
     public void delete(Long id){
-        clientRepository.deleteById(id);
+        try {
+            findById(id);
+            clientRepository.deleteById(id);
+        } catch (Exception e){
+        }
+
     }
 
     public Client update(Long id, Client client){
