@@ -1,16 +1,13 @@
 package com.hypeflame.project.services;
 
-import com.hypeflame.project.dto.ClientRequestModel;
-import com.hypeflame.project.dto.OrderRequestModel;
-import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
+import com.hypeflame.project.entities.enums.OrderStatus;
 import com.hypeflame.project.entities.enums.PaymentStatus;
 import com.hypeflame.project.repositories.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +20,10 @@ public class OrderService {
     @Autowired
     private ModelMapper modelMapper;
 
-
+    //TODO
     public void payOrder(Long orderId){
         Order order = findById(orderId);
+        order.setOrderStatus(OrderStatus.FINISHED);
         Payment payment = order.getPayment();
         payment.setPaymentStatus(PaymentStatus.PAGO);
         payment.setMoment(new Date());
@@ -42,6 +40,7 @@ public class OrderService {
         return order.orElseThrow();
     }
 
+    //TODO
     public Order insert(Order obj){
         Order order = obj;
         Payment payment = order.getPayment();

@@ -1,8 +1,8 @@
 package com.hypeflame.project.dto;
 
 import com.hypeflame.project.entities.Item;
-import com.hypeflame.project.entities.Payment;
 import com.hypeflame.project.entities.enums.OrderStatus;
+import com.hypeflame.project.entities.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Date;
@@ -18,8 +18,12 @@ public class OrderItemListResponseModel {
     private String clientId;
     private String clientName;
     private String clientCpf;
-    private Payment payment;
+    private Integer totalItems;
     private Double total;
+    private Long orderPaymentId;
+    private PaymentStatus paymentStatus;
+    private Date orderPaymentMoment;
+
 
     private List<Item> itemList;
 

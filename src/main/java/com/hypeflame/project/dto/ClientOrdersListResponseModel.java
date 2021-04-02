@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 @Getter
 @Setter
-public class ClientOrdersResponseModel {
+public class ClientOrdersListResponseModel {
 
     private List<Order> orderList;
 }

@@ -1,15 +1,9 @@
 package com.hypeflame.project.services;
 
-import com.hypeflame.project.entities.Client;
-import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
-import com.hypeflame.project.entities.Payment;
-import com.hypeflame.project.entities.enums.PaymentStatus;
 import com.hypeflame.project.repositories.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -43,6 +44,12 @@ public class Order {
     }
 
     private Double total = getTotal();
+    private Integer totalItems = getTotalItems();
+
+    public Integer getTotalItems(){
+        Integer n = itemList.size();
+        return n;
+    }
 
     public Double getTotal(){
         double total = 0;
@@ -50,5 +57,19 @@ public class Order {
             total += items.getServicePrice();
         }
         return total;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return getId().equals(order.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

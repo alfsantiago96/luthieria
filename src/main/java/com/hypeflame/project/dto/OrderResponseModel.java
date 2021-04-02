@@ -11,12 +11,13 @@ import java.util.Date;
 @Setter
 public class OrderResponseModel {
 
-    private String id;
-    private OrderStatus orderStatus;
-    private Date moment;
+    private String orderId;
     private String clientId;
     private String clientName;
+    private Date moment;
+    private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
+    private Integer totalItems;
     private Double total;
 
 }

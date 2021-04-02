@@ -1,12 +1,9 @@
 package com.hypeflame.project.resources;
 
-import com.hypeflame.project.dto.ClientFullResponseModel;
-import com.hypeflame.project.dto.ClientRequestModel;
-import com.hypeflame.project.dto.ClientResponseModel;
-import com.hypeflame.project.dto.ClientOrdersResponseModel;
+import com.hypeflame.project.dto.*;
 import com.hypeflame.project.entities.Client;
-import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.services.ClientService;
+import com.hypeflame.project.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +18,9 @@ public class ClientResource {
 
     private ClientService clientService;
     private ModelMapper modelMapper;
+
+    private OrderResource orderResource;
+    private OrderService orderService;
 
     @Autowired
     public ClientResource(ClientService clientService, ModelMapper modelMapper) {
@@ -40,9 +40,9 @@ public class ClientResource {
         return ResponseEntity.ok().body(toFullModel(client));
     }
 
-    @GetMapping(value = "/{id}/orders")
-    public ResponseEntity<ClientOrdersResponseModel> findClientOrders(@PathVariable Long id){
-        Client client = clientService.findById(id);
+    @GetMapping(value = "/{idClient}/orders")
+    public ResponseEntity<ClientOrdersListResponseModel> findClientOrders(@PathVariable Long idClient){
+        Client client = clientService.findById(idClient);
         return ResponseEntity.ok().body(toClientOrders(client));
     }
 
@@ -75,8 +75,8 @@ public class ClientResource {
     public ClientFullResponseModel toFullModel(Client client){
         return modelMapper.map(client, ClientFullResponseModel.class);
     }
-    public ClientOrdersResponseModel toClientOrders(Client client){
-        return modelMapper.map(client, ClientOrdersResponseModel.class);
+    public ClientOrdersListResponseModel toClientOrders(Client client){
+        return modelMapper.map(client, ClientOrdersListResponseModel.class);
     }
     public List<ClientResponseModel> toCollectionModel(List<Client> clientList){
         return clientList.stream()
