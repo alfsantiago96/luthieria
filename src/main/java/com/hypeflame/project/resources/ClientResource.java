@@ -1,5 +1,6 @@
 package com.hypeflame.project.resources;
 
+import com.hypeflame.project.domain.exception.DomainException;
 import com.hypeflame.project.dto.*;
 import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.services.ClientService;
@@ -53,21 +54,30 @@ public class ClientResource {
 
     @GetMapping(value = "/{idClient}/orders")
     public ResponseEntity<ClientOrdersListResponseModel> findClientOrders(@PathVariable Long idClient){
-        Client client = clientService.findById(idClient);
-        return ResponseEntity.ok().body(toClientOrders(client));
+        try {
+            Client client = clientService.findById(idClient);
+            return ResponseEntity.ok().body(toClientOrders(client));
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<ClientResponseModel> insert(@Valid @RequestBody ClientRequestModel clientRequestModel){
         Client client = toEntity(clientRequestModel);
-        clientService.insert(client);
-        return ResponseEntity.status(HttpStatus.CREATED).body(toModel(client));
+        try {
+            clientService.insert(client);
+            return ResponseEntity.status(HttpStatus.CREATED).body(toModel(client));
+        }catch (Exception e){
+            throw new DomainException("Client already registered");
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Client> update(@PathVariable Long id, @Valid @RequestBody Client client){
+    public ResponseEntity<Client> update(@PathVariable Long id, @Valid @RequestBody ClientRequestModel clientRequestModel){
         try {
-            Client entity = clientService.update(id, client);
+            Client entity = clientService.update(id, toEntity(clientRequestModel));
             return ResponseEntity.ok().body(entity);
         }catch (Exception e) {
             return ResponseEntity.notFound().build();

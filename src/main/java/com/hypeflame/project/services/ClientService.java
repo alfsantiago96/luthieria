@@ -1,5 +1,6 @@
 package com.hypeflame.project.services;
 
+import com.hypeflame.project.domain.exception.DomainException;
 import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.repositories.ClientRepository;
 import org.modelmapper.ModelMapper;
@@ -30,8 +31,14 @@ public class ClientService {
 
     public void insert(Client client) {
         Client obj = client;
-        obj.setAdm(false);
-        clientRepository.save(obj);
+        Client clientEmail = clientRepository.findByEmail(obj.getEmail());
+        Client clientCpf = clientRepository.findByCpf(obj.getCpf());
+        if (clientEmail == null && clientCpf == null) {
+            obj.setAdm(false);
+            clientRepository.save(obj);
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     public void delete(Long id){
@@ -44,7 +51,9 @@ public class ClientService {
     }
 
     public Client update(Long id, Client client){
+        client.setId(id);
         Optional<Client> entity = clientRepository.findById(id);
+        client.setAdm(false);
         updateData(client, entity);
         clientRepository.save(client);
         return client;
