@@ -4,8 +4,10 @@ import com.hypeflame.project.dto.OrderFullResponseModel;
 import com.hypeflame.project.dto.OrderItemListResponseModel;
 import com.hypeflame.project.dto.OrderRequestModel;
 import com.hypeflame.project.dto.OrderResponseModel;
+import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
+import com.hypeflame.project.services.ClientService;
 import com.hypeflame.project.services.OrderService;
 import com.hypeflame.project.services.PaymentService;
 import org.modelmapper.ModelMapper;
@@ -29,6 +31,9 @@ public class OrderResource {
     private ClientResource clientResource;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ClientService clientService;
+
 
     @GetMapping(value = "/pay/{orderId}")
     public ResponseEntity<Payment> payRequest(@PathVariable Long orderId){
@@ -56,9 +61,10 @@ public class OrderResource {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseModel> insert(@RequestBody OrderRequestModel orderRequestModel){
-        Order order = toEntity(orderRequestModel);
-        orderService.insert(order);
+    public ResponseEntity<OrderResponseModel> insert(@RequestBody OrderRequestModel obj){
+        Client client = clientService.findById(obj.getClient());
+        Order order = toEntity(obj);
+        orderService.newOrder(order, client);
         return ResponseEntity.status(HttpStatus.CREATED).body(toModel(order));
     }
 

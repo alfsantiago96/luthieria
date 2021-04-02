@@ -36,11 +36,10 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<Item> itemList = new ArrayList<>();
 
-    public Order(Long id, Date moment, OrderStatus orderStatus, Client client) {
+    public Order(Long id, Date moment, OrderStatus orderStatus) {
         this.id = id;
         this.moment = moment;
         this.orderStatus = orderStatus;
-        this.client = client;
     }
 
     private Double total = getTotal();

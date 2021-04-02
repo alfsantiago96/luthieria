@@ -1,5 +1,6 @@
 package com.hypeflame.project.services;
 
+import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
 import com.hypeflame.project.entities.enums.OrderStatus;
@@ -30,6 +31,17 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    public void newOrder(Order obj, Client client){
+        Order order = obj;
+        order.setOrderStatus(OrderStatus.BUDGET_ANALYSING);
+        order.setMoment(new Date());
+        order.setClient(client);
+        Order savedOrder = save(order);
+        Payment payment = new Payment(savedOrder.getId(), new Date(), PaymentStatus.ABERTO, savedOrder);
+        order.setPayment(payment);
+        orderRepository.save(order);
+    }
+
     public List<Order> findAll(){
         List<Order> orderList = orderRepository.findAll();
         return orderList;
@@ -40,15 +52,9 @@ public class OrderService {
         return order.orElseThrow();
     }
 
-    //TODO
-    public Order insert(Order obj){
-        Order order = obj;
-        Payment payment = order.getPayment();
-        payment.setId(order.getId());;
-        payment.setPaymentStatus(PaymentStatus.ABERTO);
-        payment.setMoment(new Date());
-        payment.setOrder(order);
-        return orderRepository.save(order);
+    public Order save(Order order){
+        orderRepository.save(order);
+        return order;
     }
 
     public void delete(Long id){
