@@ -16,7 +16,7 @@ public class OrderFullResponseModel {
 
     private String id;
     private OrderStatus orderStatus;
-    private Date moment;
+    private Date orderDate;
     private Client client;
     private Payment payment;
     private Double total;

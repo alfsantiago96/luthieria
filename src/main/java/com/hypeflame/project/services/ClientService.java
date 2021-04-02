@@ -28,7 +28,9 @@ public class ClientService {
     }
 
     public void insert(Client client) {
-            clientRepository.save(client);
+        Client obj = client;
+        obj.setAdm(false);
+        clientRepository.save(obj);
     }
 
     public void delete(Long id){

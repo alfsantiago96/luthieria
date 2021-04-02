@@ -14,9 +14,9 @@ public class OrderResponseModel {
     private String orderId;
     private String clientId;
     private String clientName;
-    private Date moment;
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
+    private Date orderDate;
     private Integer totalItems;
     private Double total;
 

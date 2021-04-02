@@ -27,17 +27,17 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.FINISHED);
         Payment payment = order.getPayment();
         payment.setPaymentStatus(PaymentStatus.PAGO);
-        payment.setMoment(new Date());
+        payment.setPaymentDate(new Date());
         orderRepository.save(order);
     }
 
     public void newOrder(Order obj, Client client){
         Order order = obj;
         order.setOrderStatus(OrderStatus.BUDGET_ANALYSING);
-        order.setMoment(new Date());
+        order.setOrderDate(new Date());
         order.setClient(client);
         Order savedOrder = save(order);
-        Payment payment = new Payment(savedOrder.getId(), new Date(), PaymentStatus.ABERTO, savedOrder);
+        Payment payment = new Payment(savedOrder.getId(), new Date(0), PaymentStatus.ABERTO, savedOrder);
         order.setPayment(payment);
         orderRepository.save(order);
     }

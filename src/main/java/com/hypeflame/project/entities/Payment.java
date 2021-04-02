@@ -20,7 +20,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date moment;
+    private Date paymentDate;
     @Enumerated
     private PaymentStatus paymentStatus = PaymentStatus.ABERTO;
 

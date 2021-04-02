@@ -48,22 +48,25 @@ public class Instantiation implements CommandLineRunner {
         c2.getOrderList().add(o3);
         clientRepository.saveAll(Arrays.asList(c1,c2));
 
-        Item i1 = new Item(null,"Regulagem", "Guitarra","Gibson Les Paul","Ajuste da altura das cordas", 50.0, o1);
+        Item i1 = new Item(null,"Regulagem", "Guitarra","Gibson Les Paul","Ajuste da altura das cordas", 50.0, o2);
         Item i2 = new Item(null,"Manutenção", "Violão","Takamine","Troca da pestana", 15.0, o3);
-        Item i3 = new Item(null,"Revisão", "Bateria","Pearl Perstige","Inspesionamento da ferragem", 100.0, o2);
+        Item i3 = new Item(null,"Revisão", "Bateria","Pearl Perstige","Inspesionamento da ferragem", 100.0, o1);
+        Item i4 = new Item(null,"Limpeza", "Gaita","Yamaha","Higienização", 325.0, o1);
         itemRepository.saveAll(Arrays.asList(i1,i2,i3));
-        o1.getItemList().add(i1);
-        o2.getItemList().add(i2);
-        o3.getItemList().add(i3);
+        o1.getItemList().add(i3);
+        o2.getItemList().add(i1);
+        o3.getItemList().add(i2);
         orderRepository.saveAll(Arrays.asList(o1,o2,o3));
-        o1.getItemList().add(i2);
+        o1.getItemList().add(i4);
         orderRepository.save(o1);
 
         Payment p1 = new Payment(null, new Date(), PaymentStatus.PAGO, o1);
-        Payment p2 = new Payment(null, new Date(), PaymentStatus.ABERTO, o2);
+        Payment p2 = new Payment(null, new Date(0), PaymentStatus.ABERTO, o2);
+        Payment p3 = new Payment(null, new Date(0), PaymentStatus.PROCESSANDO, o3);
         o1.setPayment(p1);
         o2.setPayment(p2);
-        orderRepository.saveAll(Arrays.asList(o1,o2));*/
+        o3.setPayment(p3);
+        orderRepository.saveAll(Arrays.asList(o1,o2,o3));*/
 
 
     }

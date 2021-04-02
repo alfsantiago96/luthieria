@@ -13,16 +13,18 @@ import java.util.List;
 public class OrderItemListResponseModel {
 
     private String id;
-    private OrderStatus orderStatus;
-    private Date moment;
     private String clientId;
     private String clientName;
     private String clientCpf;
-    private Integer totalItems;
+    private Date orderDate;
+    private OrderStatus orderStatus;
+    private PaymentStatus paymentStatus;
+    private Date paymentDate;
     private Double total;
     private Long orderPaymentId;
-    private PaymentStatus paymentStatus;
-    private Date orderPaymentMoment;
+
+
+    private Integer totalItems;
 
 
     private List<Item> itemList;

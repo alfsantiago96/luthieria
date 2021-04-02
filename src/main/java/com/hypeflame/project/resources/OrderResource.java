@@ -35,7 +35,7 @@ public class OrderResource {
     private ClientService clientService;
 
 
-    @GetMapping(value = "/pay/{orderId}")
+    @GetMapping(value = "/{orderId}/pay")
     public ResponseEntity<Payment> payRequest(@PathVariable Long orderId){
         orderService.payOrder(orderId);
         Payment payment = paymentService.findById(orderId);

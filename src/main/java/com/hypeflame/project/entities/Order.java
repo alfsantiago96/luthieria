@@ -2,7 +2,6 @@ package com.hypeflame.project.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hypeflame.project.entities.enums.OrderStatus;
-import com.hypeflame.project.entities.enums.PaymentStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date moment;
+    private Date orderDate;
     @Enumerated
     private OrderStatus orderStatus;
 
@@ -36,10 +35,11 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<Item> itemList = new ArrayList<>();
 
-    public Order(Long id, Date moment, OrderStatus orderStatus) {
+    public Order(Long id, Date orderDate, OrderStatus orderStatus, Client client) {
         this.id = id;
-        this.moment = moment;
+        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
+        this.client = client;
     }
 
     private Double total = getTotal();
