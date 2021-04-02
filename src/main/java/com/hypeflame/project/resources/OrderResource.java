@@ -1,12 +1,10 @@
 package com.hypeflame.project.resources;
 
-import com.hypeflame.project.dto.OrderFullResponseModel;
-import com.hypeflame.project.dto.OrderItemListResponseModel;
-import com.hypeflame.project.dto.OrderRequestModel;
-import com.hypeflame.project.dto.OrderResponseModel;
+import com.hypeflame.project.dto.*;
 import com.hypeflame.project.entities.Client;
 import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
+import com.hypeflame.project.entities.enums.OrderStatus;
 import com.hypeflame.project.services.ClientService;
 import com.hypeflame.project.services.OrderService;
 import com.hypeflame.project.services.PaymentService;
@@ -35,11 +33,17 @@ public class OrderResource {
     private ClientService clientService;
 
 
-    @GetMapping(value = "/{orderId}/pay")
-    public ResponseEntity<Payment> payRequest(@PathVariable Long orderId){
-        orderService.payOrder(orderId);
-        Payment payment = paymentService.findById(orderId);
-        return ResponseEntity.ok().body(payment);
+    @GetMapping(value = "/{id}/pay")
+    public ResponseEntity<OrderPaydResponseModel> payOrder(@PathVariable Long id){
+        orderService.payOrder(id);
+        Order order = orderService.findById(id);
+        return ResponseEntity.ok().body(toOrderPaydModel(order));
+    }
+
+    @GetMapping(value = "/{id}/finish")
+    public ResponseEntity<OrderResponseModel> finishOrder(@PathVariable Long id) {
+        Order order = orderService.finishOrder(id);
+        return ResponseEntity.ok().body(toModel(order));
     }
 
     @GetMapping
@@ -60,18 +64,13 @@ public class OrderResource {
         return ResponseEntity.ok().body(toFullModel(order));
     }
 
+
     @PostMapping
     public ResponseEntity<OrderResponseModel> insert(@RequestBody OrderRequestModel obj){
         Client client = clientService.findById(obj.getClient());
         Order order = toEntity(obj);
         orderService.newOrder(order, client);
         return ResponseEntity.status(HttpStatus.CREATED).body(toModel(order));
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order order){
-        Order entity = orderService.update(id, order);
-        return ResponseEntity.ok().body(entity);
     }
 
     @DeleteMapping("/{id}")
@@ -86,6 +85,9 @@ public class OrderResource {
     }
     public OrderItemListResponseModel toOrderItemListModel(Order order) {
         return modelMapper.map(order, OrderItemListResponseModel.class);
+    }
+    public OrderPaydResponseModel toOrderPaydModel(Order order){
+        return modelMapper.map(order, OrderPaydResponseModel.class);
     }
     public OrderFullResponseModel toFullModel(Order order){
         return modelMapper.map(order, OrderFullResponseModel.class);

@@ -1,6 +1,7 @@
 package com.hypeflame.project.services;
 
 import com.hypeflame.project.entities.Client;
+import com.hypeflame.project.entities.Item;
 import com.hypeflame.project.entities.Order;
 import com.hypeflame.project.entities.Payment;
 import com.hypeflame.project.entities.enums.OrderStatus;
@@ -24,11 +25,17 @@ public class OrderService {
     //TODO
     public void payOrder(Long orderId){
         Order order = findById(orderId);
-        order.setOrderStatus(OrderStatus.FINISHED);
+        order.setOrderStatus(OrderStatus.PROCESSING);
         Payment payment = order.getPayment();
         payment.setPaymentStatus(PaymentStatus.PAGO);
         payment.setPaymentDate(new Date());
         orderRepository.save(order);
+    }
+    public Order finishOrder(Long id){
+        Order order = findById(id);
+        order.setOrderStatus(OrderStatus.FINISHED);
+        save(order);
+        return order;
     }
 
     public void newOrder(Order obj, Client client){
@@ -39,6 +46,12 @@ public class OrderService {
         Order savedOrder = save(order);
         Payment payment = new Payment(savedOrder.getId(), new Date(0), PaymentStatus.ABERTO, savedOrder);
         order.setPayment(payment);
+        orderRepository.save(order);
+    }
+
+    public void insertItem(Item item, Long idOrder){
+        Order order = findById(idOrder);
+        order.getItemList().add(item);
         orderRepository.save(order);
     }
 
@@ -61,12 +74,7 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    public Order update(Long id, Order order){
-        Optional<Order> entity = orderRepository.findById(id);
-        updateData(order, entity);
-        orderRepository.save(order);
-        return order;
-    }
+
     private void updateData(Order order, Optional entity) {
         modelMapper.map(order, entity);
     }

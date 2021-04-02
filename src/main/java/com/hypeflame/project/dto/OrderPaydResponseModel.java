@@ -1,6 +1,5 @@
 package com.hypeflame.project.dto;
 
-import com.hypeflame.project.entities.Payment;
 import com.hypeflame.project.entities.enums.OrderStatus;
 import com.hypeflame.project.entities.enums.PaymentStatus;
 import lombok.Getter;
@@ -9,15 +8,15 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class OrderResponseModel {
+public class OrderPaydResponseModel {
 
-    private String orderId;
-    private String clientId;
+    private final String l = " # OBRIGADO PELA PREFERENCIA # ";
     private String clientName;
-    private OrderStatus orderStatus;
-    private Date orderDate;
-    private Integer totalItems;
-    private Double total;
+    private String clientCPF;
+    private final String i = " # DADOS DO PAGAMENTO # ";
+    private String paymentId;
+    private Date paymentDate;
     private PaymentStatus paymentStatus;
-
+    private OrderStatus orderStatus;
+    private Double total;
 }
