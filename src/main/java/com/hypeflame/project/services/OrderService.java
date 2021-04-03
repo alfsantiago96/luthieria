@@ -53,9 +53,13 @@ public class OrderService {
     }
 
     public void insertItem(Item item, Long idOrder){
-        Order order = findById(idOrder);
-        order.getItemList().add(item);
-        orderRepository.save(order);
+        try {
+            Order order = findById(idOrder);
+            order.getItemList().add(item);
+            orderRepository.save(order);
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 
     //TODO

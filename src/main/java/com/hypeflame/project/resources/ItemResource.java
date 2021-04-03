@@ -1,8 +1,10 @@
 package com.hypeflame.project.resources;
 
+import com.hypeflame.project.domain.exception.DomainException;
 import com.hypeflame.project.dto.ItemFullResponseModel;
 import com.hypeflame.project.dto.ItemRequestModel;
 import com.hypeflame.project.dto.ItemResponseModel;
+import com.hypeflame.project.dto.ItemUptadeRequestModel;
 import com.hypeflame.project.entities.Item;
 import com.hypeflame.project.services.ItemService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,22 +27,56 @@ public class ItemResource {
 
     @GetMapping
     public ResponseEntity<List<ItemResponseModel>> findAll(){
-        List<Item> itemList = itemService.findAll();
-        return ResponseEntity.ok().body(toCollectionModel(itemList));
+        try {
+            List<Item> itemList = itemService.findAll();
+            return ResponseEntity.ok().body(toCollectionModel(itemList));
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ItemFullResponseModel> findById(@PathVariable Long id){
-         Item item = itemService.findById(id);
-         return ResponseEntity.ok().body(toFullModel(item));
+         try {
+             Item item = itemService.findById(id);
+             return ResponseEntity.ok().body(toFullModel(item));
+         }catch (Exception e) {
+             return ResponseEntity.notFound().build();
+         }
     }
 
     @PostMapping
     public ResponseEntity<ItemResponseModel> insertItem(@RequestBody ItemRequestModel itemRequestModel){
-        Item item = toEntity(itemRequestModel);
-        itemService.insertItem(item, itemRequestModel.getOrderId());
-        return ResponseEntity.ok().body(toModel(item));
+        try {
+            Item item = toEntity(itemRequestModel);
+            itemService.insertItem(item, itemRequestModel.getOrderId());
+            return ResponseEntity.ok().body(toModel(item));
+        }catch (Exception e){
+            throw new DomainException("This order doesn't exist.");
+        }
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ItemResponseModel> updateItem(@PathVariable Long id, @RequestBody @Valid ItemUptadeRequestModel itemUptadeRequestModel){
+        try {
+            itemService.updateItem(id, itemUptadeRequestModel);
+            Item item = itemService.findById(id);
+            return ResponseEntity.ok().body(toModel(item));
+        }catch (Exception e){
+            throw new DomainException("This item Doesn't exist");
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id){
+        try {
+            itemService.deleteItem(id);
+            return ResponseEntity.noContent().build();
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     //ModelMapper
     public Item toEntity(ItemRequestModel itemRequestModel){
